@@ -1,0 +1,47 @@
+[
+  {
+    "agent": "Background Check Agent",
+    "status": "CLEAR",
+    "risk_level": "LOW",
+    "employment": "PASSED",
+    "customer": "Alex Thompson",
+    "timestamp": "2025-09-13T23:07:35.967468"
+  },
+  {
+    "agent": "Credit Evaluation Agent",
+    "fico_score": 735,
+    "credit_rating": "Good",
+    "decision": "APPROVED",
+    "customer": "Alex Thompson",
+    "timestamp": "2025-09-13T23:07:35.967501"
+  },
+  {
+    "agent": "Offer Generation Agent",
+    "original_apr": 7.477,
+    "monthly_payment": 2511.61,
+    "loan_amount": 450000,
+    "customer": "Alex Thompson",
+    "timestamp": "2025-09-13T23:07:35.967509"
+  },
+  {
+    "agent": "Multi-Agent Negotiation",
+    "customer_empathy": "Advocating for customer - requesting 6.8% rate",
+    "bank_negotiation": "Protecting bank interests - loyalty score 6 allows concessions",
+    "arbitrator": "Ready for deadlock resolution if needed",
+    "loyalty_score": 6,
+    "negotiation_rounds": 4,
+    "final_apr": 6.9,
+    "cashback": 20000,
+    "customer": "Alex Thompson",
+    "timestamp": "2025-09-13T23:07:35.967527"
+  },
+  {
+    "agent": "Financial Advisor Agent",
+    "total_customer_value": 75321,
+    "monthly_savings": 141.17,
+    "interest_savings": 50821,
+    "immediate_benefits": 24500,
+    "customer": "Alex Thompson",
+    "timestamp": "2025-09-13T23:07:35.967537"
+  }
+]

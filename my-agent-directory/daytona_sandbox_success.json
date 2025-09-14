@@ -1,0 +1,7 @@
+{
+  "created_at": "2025-09-13T23:20:08.335471",
+  "api_used": "daytona.Daytona with DaytonaConfig",
+  "status": "SUCCESS",
+  "test_results": "Game of Loans agents working in sandbox",
+  "web_dashboard": "https://app.daytona.io/dashboard/sandboxes"
+}
