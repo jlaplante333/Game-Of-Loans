@@ -1,0 +1,35 @@
+# Game of Loans - Python Requirements
+# This file lists Python dependencies if any Python components are used
+
+# Email handling (if using Python for email processing)
+# smtplib is built-in to Python
+# email is built-in to Python
+
+# HTTP requests (if needed for API calls)
+requests>=2.31.0
+
+# JSON handling (built-in to Python)
+# json is built-in to Python
+
+# Environment variables (if using python-dotenv)
+python-dotenv>=1.0.0
+
+# Date/time handling (built-in to Python)
+# datetime is built-in to Python
+
+# Logging (built-in to Python)
+# logging is built-in to Python
+
+# Note: This project is primarily Node.js/TypeScript based
+# Most dependencies are managed through package.json and pnpm
+# This requirements.txt is provided for any Python utilities or scripts
+
+# If you need to install these Python dependencies:
+# pip install -r requirements.txt
+
+# Main dependencies are in package.json for Node.js/TypeScript:
+# - @inkeep/agents-sdk
+# - TypeScript
+# - Node.js packages for MCP servers
+# - Email handling via nodemailer
+# - API integrations via fetch/axios
