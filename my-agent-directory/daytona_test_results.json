@@ -5,7 +5,7 @@
     "risk_level": "LOW",
     "employment": "PASSED",
     "customer": "Alex Thompson",
-    "timestamp": "2025-09-13T23:07:35.967468"
+    "timestamp": "2025-09-13T23:38:04.840829"
   },
   {
     "agent": "Credit Evaluation Agent",
@@ -13,7 +13,7 @@
     "credit_rating": "Good",
     "decision": "APPROVED",
     "customer": "Alex Thompson",
-    "timestamp": "2025-09-13T23:07:35.967501"
+    "timestamp": "2025-09-13T23:38:04.840845"
   },
   {
     "agent": "Offer Generation Agent",
@@ -21,7 +21,7 @@
     "monthly_payment": 2511.61,
     "loan_amount": 450000,
     "customer": "Alex Thompson",
-    "timestamp": "2025-09-13T23:07:35.967509"
+    "timestamp": "2025-09-13T23:38:04.840852"
   },
   {
     "agent": "Multi-Agent Negotiation",
@@ -33,7 +33,7 @@
     "final_apr": 6.9,
     "cashback": 20000,
     "customer": "Alex Thompson",
-    "timestamp": "2025-09-13T23:07:35.967527"
+    "timestamp": "2025-09-13T23:38:04.840868"
   },
   {
     "agent": "Financial Advisor Agent",
@@ -42,6 +42,6 @@
     "interest_savings": 50821,
     "immediate_benefits": 24500,
     "customer": "Alex Thompson",
-    "timestamp": "2025-09-13T23:07:35.967537"
+    "timestamp": "2025-09-13T23:38:04.840878"
   }
 ]
