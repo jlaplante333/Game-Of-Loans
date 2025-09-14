@@ -12,20 +12,16 @@ let transporter = null;
 
 async function createTransporter() {
   try {
-    // Create a test account with Ethereal Email
-    const testAccount = await nodemailer.createTestAccount();
-    
-    transporter = nodemailer.createTransporter({
-      host: 'smtp.ethereal.email',
-      port: 587,
-      secure: false,
+    // Use Gmail SMTP for real email delivery
+    transporter = nodemailer.createTransport({
+      service: 'gmail',
       auth: {
-        user: testAccount.user,
-        pass: testAccount.pass,
-      },
+        user: process.env.GMAIL_USER || 'jonathan.laplante@gmail.com',
+        pass: process.env.GMAIL_APP_PASSWORD || 'rgylxwoifvgudant'
+      }
     });
     
-    console.log('✅ Email transporter created with test account:', testAccount.user);
+    console.log('✅ Email transporter created with Gmail SMTP for real email delivery');
   } catch (error) {
     console.error('❌ Failed to create email transporter:', error.message);
   }

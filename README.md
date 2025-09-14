@@ -251,3 +251,4 @@ Built with ❤️ for the hackathon by:
 ---
 
 *"In the Game of Loans, you either win or you pay too much."* 🏦⚔️
+

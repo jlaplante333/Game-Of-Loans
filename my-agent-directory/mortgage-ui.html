@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game of Loans - Mortgage Application</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 800px;
+            min-height: 600px;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .chat-container {
+            height: 500px;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message.agent {
+            justify-content: flex-start;
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            padding: 15px 20px;
+            border-radius: 20px;
+            font-size: 1em;
+            line-height: 1.4;
+        }
+
+        .message.user .message-bubble {
+            background: #007bff;
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.agent .message-bubble {
+            background: white;
+            color: #333;
+            border: 1px solid #e0e0e0;
+            border-bottom-left-radius: 5px;
+        }
+
+        .input-container {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #1e7e34;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #545b62;
+            transform: translateY(-2px);
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .offer-details {
+            background: #e8f4fd;
+            border: 2px solid #007bff;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .offer-details h3 {
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+
+        .offer-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .offer-item:last-child {
+            border-bottom: none;
+        }
+
+        .negotiation-round {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+
+        .negotiation-round h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .final-decision {
+            background: #d1ecf1;
+            border: 2px solid #17a2b8;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .final-decision h3 {
+            color: #17a2b8;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏠 Game of Loans</h1>
+            <p>Your AI-Powered Mortgage Application Assistant</p>
+        </div>
+        
+        <div class="chat-container" id="chatContainer">
+            <div class="message agent">
+                <div class="message-bubble">
+                    Welcome to Game of Loans! I'm your AI mortgage assistant. To get started with your mortgage application, I'll need to collect some basic information from you. Let's begin!
+                </div>
+            </div>
+        </div>
+        
+        <div class="input-container">
+            <!-- Initial Form -->
+            <div id="initialForm">
+                <div class="input-group">
+                    <input type="text" id="fullName" placeholder="Full Name" required>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="ssn" placeholder="SSN (XXX-XX-XXXX)" maxlength="11" required>
+                </div>
+                <div class="input-group">
+                    <input type="date" id="birthDate" required>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="submitInitialInfo()">Submit Information</button>
+                </div>
+            </div>
+
+            <!-- Processing Stage -->
+            <div id="processingStage" class="hidden">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <span id="processingText">Processing your information...</span>
+                </div>
+            </div>
+
+            <!-- Offer Decision Stage -->
+            <div id="offerStage" class="hidden">
+                <div class="button-group">
+                    <button class="btn btn-success" onclick="acceptOffer()">✅ ACCEPT OFFER</button>
+                    <button class="btn btn-danger" onclick="rejectOffer()">❌ REJECT OFFER</button>
+                </div>
+            </div>
+
+            <!-- Negotiation Stage -->
+            <div id="negotiationStage" class="hidden">
+                <div class="button-group">
+                    <button class="btn btn-secondary" onclick="continueNegotiation()">Next Negotiation Round</button>
+                </div>
+            </div>
+
+            <!-- Arbitrator Decision Stage -->
+            <div id="arbitratorStage" class="hidden">
+                <div class="button-group">
+                    <button class="btn btn-success" onclick="acceptArbitratorDecision()">✅ ACCEPT ARBITRATOR DECISION</button>
+                    <button class="btn btn-danger" onclick="rejectArbitratorDecision()">❌ REJECT ARBITRATOR DECISION</button>
+                </div>
+            </div>
+
+            <!-- Final Stage -->
+            <div id="finalStage" class="hidden">
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="downloadContract()">📄 Download Contract</button>
+                    <button class="btn btn-secondary" onclick="startNew()">Start New Application</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Application state
+        let currentStage = 'initial';
+        let userInfo = {};
+        let currentOffer = {};
+        let negotiationRound = 0;
+        let maxNegotiationRounds = 5;
+        let finalDecision = {};
+
+        // API endpoints
+        const API_BASE = 'http://localhost:3003';
+        const PROJECT_ID = 'game-of-loans';
+        const GRAPH_ID = 'mortgage-negotiator-graph';
+
+        // Utility functions
+        function addMessage(content, isUser = false, isHtml = false) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'agent'}`;
+            
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.className = 'message-bubble';
+            
+            if (isHtml) {
+                bubbleDiv.innerHTML = content;
+            } else {
+                bubbleDiv.textContent = content;
+            }
+            
+            messageDiv.appendChild(bubbleDiv);
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function showStage(stageName) {
+            // Hide all stages
+            document.querySelectorAll('[id$="Stage"], [id$="Form"]').forEach(el => {
+                el.classList.add('hidden');
+            });
+            
+            // Show current stage
+            const stageElement = document.getElementById(stageName);
+            if (stageElement) {
+                stageElement.classList.remove('hidden');
+            }
+        }
+
+        function formatSSN(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length >= 6) {
+                value = value.substring(0,3) + '-' + value.substring(3,5) + '-' + value.substring(5,9);
+            } else if (value.length >= 3) {
+                value = value.substring(0,3) + '-' + value.substring(3);
+            }
+            input.value = value;
+        }
+
+        // Add SSN formatting
+        document.getElementById('ssn').addEventListener('input', function() {
+            formatSSN(this);
+        });
+
+        // Main application functions
+        async function submitInitialInfo() {
+            const fullName = document.getElementById('fullName').value;
+            const ssn = document.getElementById('ssn').value;
+            const birthDate = document.getElementById('birthDate').value;
+
+            if (!fullName || !ssn || !birthDate) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            userInfo = { fullName, ssn, birthDate };
+            
+            addMessage(`Name: ${fullName}\nSSN: ${ssn}\nBirth Date: ${birthDate}`, true);
+            addMessage("Thank you! I'm now sending your information to our agents for background check, credit evaluation, and mortgage rate calculation. This may take a few moments...");
+            
+            showStage('processingStage');
+            await processApplication();
+        }
+
+        async function processApplication() {
+            const stages = [
+                { text: "Running background check...", delay: 2000 },
+                { text: "Performing credit evaluation...", delay: 2000 },
+                { text: "Calculating mortgage rates and generating offers...", delay: 3000 },
+                { text: "Finalizing your personalized offer...", delay: 1500 }
+            ];
+
+            for (let i = 0; i < stages.length; i++) {
+                document.getElementById('processingText').textContent = stages[i].text;
+                await new Promise(resolve => setTimeout(resolve, stages[i].delay));
+            }
+
+            // Simulate API call to agents
+            await callAgentGraph();
+        }
+
+        async function callAgentGraph() {
+            try {
+                // Call your REAL agent graph - this will trigger all your existing agents and emails
+                const response = await fetch(`${API_BASE}/api/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-inkeep-project-id': PROJECT_ID,
+                        'x-inkeep-graph-id': GRAPH_ID,
+                    },
+                    body: JSON.stringify({
+                        message: `Hello, I'm ${userInfo.fullName} (SSN: ${userInfo.ssn}, DOB: ${userInfo.birthDate}). I would like to apply for a mortgage. Please run my background check, credit evaluation, and generate mortgage offers.`,
+                        conversationId: 'mortgage-app-' + Date.now()
+                    })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('Agent response:', result);
+                    
+                    // Parse the actual agent response to extract offer details
+                    if (result.message && result.message.includes('VERY POOR')) {
+                        // Handle rejection case
+                        addMessage("❌ Unfortunately, your application has been rejected due to insufficient creditworthiness. Please work on improving your credit score and reapply in the future.");
+                        showStage('finalStage');
+                        return;
+                    }
+                    
+                    // Show the real agent response and then display offer
+                    addMessage("✅ Your application has been processed by our real agents! Here's the response:");
+                    addMessage(result.message || "Processing complete. Here's your personalized mortgage offer:");
+                    displayMockOffer(); // Still use mock offer for UI display, but real agents are called
+                } else {
+                    console.error('API call failed with status:', response.status);
+                    addMessage("⚠️ There was an issue connecting to our agents. Using backup processing...");
+                    displayMockOffer();
+                }
+            } catch (error) {
+                console.error('API call failed:', error);
+                addMessage("⚠️ There was an issue connecting to our agents. Using backup processing...");
+                displayMockOffer();
+            }
+        }
+
+        function displayMockOffer() {
+            // Mock offer data for demonstration
+            currentOffer = {
+                creditScore: 720,
+                creditRating: "Good",
+                approved: true,
+                loanAmount: 350000,
+                interestRate: 6.75,
+                monthlyPayment: 2267,
+                loanTerm: 30,
+                closingCosts: 8500,
+                pmi: 245,
+                totalMonthlyPayment: 2512
+            };
+
+            const offerHtml = `
+                <div class="offer-details">
+                    <h3>🎉 Congratulations! Your Mortgage Offer</h3>
+                    <div class="offer-item">
+                        <span><strong>Credit Score:</strong></span>
+                        <span>${currentOffer.creditScore}</span>
+                    </div>
+                    <div class="offer-item">
+                        <span><strong>Credit Rating:</strong></span>
+                        <span>${currentOffer.creditRating}</span>
+                    </div>
+                    <div class="offer-item">
+                        <span><strong>Loan Amount:</strong></span>
+                        <span>$${currentOffer.loanAmount.toLocaleString()}</span>
+                    </div>
+                    <div class="offer-item">
+                        <span><strong>Interest Rate:</strong></span>
+                        <span>${currentOffer.interestRate}% APR</span>
+                    </div>
+                    <div class="offer-item">
+                        <span><strong>Loan Term:</strong></span>
+                        <span>${currentOffer.loanTerm} years</span>
+                    </div>
+                    <div class="offer-item">
+                        <span><strong>Monthly Payment (P&I):</strong></span>
+                        <span>$${currentOffer.monthlyPayment.toLocaleString()}</span>
+                    </div>
+                    <div class="offer-item">
+                        <span><strong>PMI:</strong></span>
+                        <span>$${currentOffer.pmi}/month</span>
+                    </div>
+                    <div class="offer-item">
+                        <span><strong>Total Monthly Payment:</strong></span>
+                        <span><strong>$${currentOffer.totalMonthlyPayment.toLocaleString()}</strong></span>
+                    </div>
+                    <div class="offer-item">
+                        <span><strong>Closing Costs:</strong></span>
+                        <span>$${currentOffer.closingCosts.toLocaleString()}</span>
+                    </div>
+                </div>
+                <p><strong>What would you like to do?</strong></p>
+            `;
+
+            addMessage(offerHtml, false, true);
+            showStage('offerStage');
+        }
+
+        function displayOffer(apiResult) {
+            // Process actual API result and display offer
+            // This would parse the agent response and extract offer details
+            displayMockOffer(); // For now, use mock data
+        }
+
+        async function acceptOffer() {
+            addMessage("✅ ACCEPT OFFER", true);
+            addMessage("Excellent! You've accepted our mortgage offer. Let me connect you with our financial advisor for final recommendations and contract preparation...");
+            
+            showStage('processingStage');
+            document.getElementById('processingText').textContent = "Preparing your final contract and recommendations...";
+            
+            await new Promise(resolve => setTimeout(resolve, 3000));
+            
+            displayFinalDecision(true);
+        }
+
+        async function rejectOffer() {
+            addMessage("❌ REJECT OFFER", true);
+            addMessage("I understand you'd like better terms. Let me connect you with our Customer Empathy Agent who will negotiate with our Bank Representative on your behalf. We'll work to get you the best possible deal!");
+            
+            negotiationRound = 0;
+            showStage('processingStage');
+            document.getElementById('processingText').textContent = "Initiating negotiation process...";
+            
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            startNegotiation();
+        }
+
+        async function startNegotiation() {
+            negotiationRound++;
+            
+            let negotiationHtml = '';
+            
+            if (negotiationRound === 1) {
+                negotiationHtml = `
+                    <div class="negotiation-round">
+                        <h4>🤝 Negotiation Round ${negotiationRound} of ${maxNegotiationRounds}</h4>
+                        <p><strong>Customer Empathy Agent:</strong> "My client deserves better terms! I'm pushing for a 5.0% interest rate - that's what competitive lenders are offering for this credit profile. Also, consider a $15,000 cash lump sum incentive to close this deal."</p>
+                        <p><strong>Bank Negotiation Agent:</strong> "I understand your position, but 5.0% is unrealistic given current market conditions. Our absolute floor is 6.23% - that's already below our standard rates. As for cash incentives, we don't typically offer lump sum payments. I can waive the $500 application fee."</p>
+                        <p><strong>Current Positions:</strong></p>
+                        <ul>
+                            <li>Customer Agent Target: 5.0% + $15,000 cash</li>
+                            <li>Bank Agent Offer: 6.23% + $500 fee waiver</li>
+                            <li>Gap: 1.23% rate difference + $14,500 cash dispute</li>
+                        </ul>
+                    </div>
+                `;
+            } else if (negotiationRound === 2) {
+                negotiationHtml = `
+                    <div class="negotiation-round">
+                        <h4>🤝 Negotiation Round ${negotiationRound} of ${maxNegotiationRounds}</h4>
+                        <p><strong>Customer Empathy Agent:</strong> "6.23% is still too high! Let's meet in the middle - 5.6% interest rate and a $10,000 cash incentive. This client has excellent credit and multiple lender options."</p>
+                        <p><strong>Bank Negotiation Agent:</strong> "I can come down to 6.0% but that's my absolute limit. Cash lump sums create regulatory complications. Instead, I'll waive all closing costs - that's worth $8,500 in savings."</p>
+                        <p><strong>Current Positions:</strong></p>
+                        <ul>
+                            <li>Customer Agent: 5.6% + $10,000 cash</li>
+                            <li>Bank Agent: 6.0% + $8,500 closing cost waiver</li>
+                            <li>Progress: Rate gap narrowed to 0.4%</li>
+                        </ul>
+                    </div>
+                `;
+            } else if (negotiationRound === 3) {
+                negotiationHtml = `
+                    <div class="negotiation-round">
+                        <h4>🤝 Negotiation Round ${negotiationRound} of ${maxNegotiationRounds}</h4>
+                        <p><strong>Customer Empathy Agent:</strong> "We're getting closer! How about 5.75% with a $7,500 cash credit at closing? This saves my client significantly over the loan term."</p>
+                        <p><strong>Bank Negotiation Agent:</strong> "I'm stretching here, but I can do 5.85% with all closing costs waived plus a $2,000 credit for home improvements. Cash lump sums are really difficult for our compliance department."</p>
+                        <p><strong>Current Positions:</strong></p>
+                        <ul>
+                            <li>Customer Agent: 5.75% + $7,500 cash</li>
+                            <li>Bank Agent: 5.85% + $10,500 total savings</li>
+                            <li>Progress: Very close on rate, cash vs. credits dispute</li>
+                        </ul>
+                    </div>
+                `;
+            } else if (negotiationRound === 4) {
+                negotiationHtml = `
+                    <div class="negotiation-round">
+                        <h4>🤝 Negotiation Round ${negotiationRound} of ${maxNegotiationRounds}</h4>
+                        <p><strong>Customer Empathy Agent:</strong> "Final push - 5.8% with a $5,000 cash credit. This is a fair compromise that works for everyone."</p>
+                        <p><strong>Bank Negotiation Agent:</strong> "I'm at my absolute limit. 5.82% with $12,000 in total credits and fee waivers. I cannot go lower on rate or provide direct cash - this is the best package I can offer."</p>
+                        <p><strong>Current Positions:</strong></p>
+                        <ul>
+                            <li>Customer Agent: 5.8% + $5,000 cash</li>
+                            <li>Bank Agent: 5.82% + $12,000 credits/waivers</li>
+                            <li>Status: Minimal gap remaining</li>
+                        </ul>
+                    </div>
+                `;
+            } else if (negotiationRound === 5) {
+                negotiationHtml = `
+                    <div class="negotiation-round">
+                        <h4>🤝 Negotiation Round ${negotiationRound} of ${maxNegotiationRounds}</h4>
+                        <p><strong>Customer Empathy Agent:</strong> "This is our final offer - 5.81% with $3,000 cash at closing. We're being very reasonable here."</p>
+                        <p><strong>Bank Negotiation Agent:</strong> "I've reached my absolute floor. I cannot go below 5.82% or provide direct cash payments. My final offer stands: 5.82% with $12,000 in closing cost waivers and credits."</p>
+                        <p><strong>Final Positions:</strong></p>
+                        <ul>
+                            <li>Customer Agent: 5.81% + $3,000 cash</li>
+                            <li>Bank Agent: 5.82% + $12,000 credits</li>
+                            <li>Status: <strong>DEADLOCK - 0.01% rate difference</strong></li>
+                        </ul>
+                        <p><em>Both agents have reached their limits. Arbitrator intervention required.</em></p>
+                    </div>
+                `;
+            }
+            
+            addMessage(negotiationHtml, false, true);
+            
+            if (negotiationRound >= maxNegotiationRounds) {
+                addMessage("We've reached the maximum number of negotiation rounds with both agents at their limits. Let me bring in our arbitrator to make a final decision...");
+                showStage('processingStage');
+                document.getElementById('processingText').textContent = "Arbitrator reviewing all negotiation positions...";
+                
+                await new Promise(resolve => setTimeout(resolve, 3000));
+                displayArbitratorDecision();
+            } else {
+                showStage('negotiationStage');
+            }
+        }
+
+        async function continueNegotiation() {
+            addMessage("Continue negotiation", true);
+            addMessage("Let me continue negotiating for better terms...");
+            
+            showStage('processingStage');
+            document.getElementById('processingText').textContent = `Negotiation round ${negotiationRound + 1}...`;
+            
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            startNegotiation();
+        }
+
+        async function acceptNegotiatedOffer() {
+            addMessage("Accept current negotiated terms", true);
+            addMessage("Great! You've accepted the negotiated terms. Let me finalize everything with our financial advisor...");
+            
+            showStage('processingStage');
+            document.getElementById('processingText').textContent = "Finalizing your negotiated contract...";
+            
+            await new Promise(resolve => setTimeout(resolve, 3000));
+            displayFinalDecision(false);
+        }
+
+        async function displayArbitratorDecision() {
+            const arbitratorHtml = `
+                <div class="final-decision">
+                    <h3>⚖️ Arbitrator Decision</h3>
+                    <p><strong>After reviewing all negotiation rounds, here's my binding decision:</strong></p>
+                    <p><em>"Both agents negotiated in good faith. The Customer Empathy Agent successfully brought the rate down from 6.75% to 5.81%, while the Bank Agent made significant concessions from their 6.23% floor to 5.82%. The 0.01% difference is negligible."</em></p>
+                    <ul>
+                        <li><strong>Final Interest Rate:</strong> 5.815% APR (split the difference)</li>
+                        <li><strong>Cash Compromise:</strong> $6,000 closing cost credits (middle ground)</li>
+                        <li><strong>Additional Concessions:</strong> All application fees waived</li>
+                        <li><strong>Autopay Benefit:</strong> 0.1% rate reduction (5.715% effective rate)</li>
+                        <li><strong>Total Savings vs Original:</strong> $${((currentOffer.interestRate - 5.815) * 1000).toFixed(0)} over loan term</li>
+                    </ul>
+                    <p><strong>Arbitrator Reasoning:</strong> "This decision acknowledges the customer's desire for cash incentives while respecting the bank's compliance constraints. The rate split fairly balances both positions, and the credit package provides substantial value."</p>
+                    <p><strong>Do you accept this arbitrator decision?</strong></p>
+                </div>
+            `;
+            
+            addMessage(arbitratorHtml, false, true);
+            showStage('arbitratorStage');
+        }
+
+        async function acceptArbitratorDecision() {
+            addMessage("✅ ACCEPT ARBITRATOR DECISION", true);
+            addMessage("Excellent! You've accepted the arbitrator's decision. Let me connect you with our financial advisor for final recommendations and contract preparation...");
+            
+            showStage('processingStage');
+            document.getElementById('processingText').textContent = "Preparing your final contract and recommendations...";
+            
+            await new Promise(resolve => setTimeout(resolve, 3000));
+            displayFinalDecision(false, true);
+        }
+
+        async function rejectArbitratorDecision() {
+            addMessage("❌ REJECT ARBITRATOR DECISION", true);
+            addMessage("I understand you'd like to try negotiating again. Let me restart the negotiation process with our agents...");
+            
+            negotiationRound = 0;
+            showStage('processingStage');
+            document.getElementById('processingText').textContent = "Restarting negotiation process...";
+            
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            startNegotiation();
+        }
+
+        function displayOfferFromAgentResponse(apiResult) {
+            // Process actual API result and display offer
+            // Parse the agent response to extract offer details
+            addMessage("✅ Your application has been processed by our agents! Here's your personalized mortgage offer:");
+            
+            // For now, display the mock offer but in a real implementation,
+            // you would parse the agent response to extract actual offer details
+            displayMockOffer();
+        }
+
+        function displayFinalDecision(accepted, arbitrated = false) {
+            let finalRate = currentOffer.interestRate;
+            let finalPayment = currentOffer.monthlyPayment;
+            let savings = 0;
+            
+            if (!accepted) {
+                finalRate = arbitrated ? currentOffer.interestRate - 0.4 : currentOffer.interestRate - (0.25 * negotiationRound);
+                finalPayment = arbitrated ? currentOffer.monthlyPayment - 85 : currentOffer.monthlyPayment - (50 * negotiationRound);
+                savings = arbitrated ? 750 : 500 * negotiationRound;
+            }
+
+            const advisorHtml = `
+                <div class="final-decision">
+                    <h3>📋 Financial Advisor - Final Summary</h3>
+                    <p><strong>Dear ${userInfo.fullName},</strong></p>
+                    <p>Congratulations on your mortgage approval! Here's your final loan summary:</p>
+                    
+                    <div class="offer-item">
+                        <span><strong>Final Interest Rate:</strong></span>
+                        <span>${finalRate.toFixed(2)}% APR</span>
+                    </div>
+                    <div class="offer-item">
+                        <span><strong>Final Monthly Payment:</strong></span>
+                        <span>$${finalPayment.toLocaleString()}</span>
+                    </div>
+                    <div class="offer-item">
+                        <span><strong>Loan Amount:</strong></span>
+                        <span>$${currentOffer.loanAmount.toLocaleString()}</span>
+                    </div>
+                    <div class="offer-item">
+                        <span><strong>Total Savings:</strong></span>
+                        <span>$${savings.toLocaleString()}</span>
+                    </div>
+                    
+                    <p><strong>Next Steps:</strong></p>
+                    <ul>
+                        <li>✅ Download your contract below</li>
+                        <li>✅ Schedule closing appointment</li>
+                        <li>✅ Prepare required documentation</li>
+                        <li>✅ Set up automatic payments for additional 0.1% rate reduction</li>
+                    </ul>
+                    
+                    <p><em>A detailed email summary has been sent to your registered email address with all terms, conditions, and next steps.</em></p>
+                </div>
+            `;
+            
+            addMessage(advisorHtml, false, true);
+            addMessage("📧 Email sent with complete mortgage summary and contract details!");
+            
+            showStage('finalStage');
+        }
+
+        function downloadContract() {
+            // Generate a mock contract PDF or document
+            const contractContent = `
+MORTGAGE LOAN CONTRACT
+======================
+
+Borrower: ${userInfo.fullName}
+SSN: ${userInfo.ssn}
+Date of Birth: ${userInfo.birthDate}
+
+LOAN TERMS:
+- Loan Amount: $${currentOffer.loanAmount.toLocaleString()}
+- Interest Rate: ${(currentOffer.interestRate - (negotiationRound * 0.25)).toFixed(2)}% APR
+- Loan Term: ${currentOffer.loanTerm} years
+- Monthly Payment: $${(currentOffer.monthlyPayment - (negotiationRound * 50)).toLocaleString()}
+
+This is a mock contract for demonstration purposes.
+Generated on: ${new Date().toLocaleDateString()}
+            `;
+            
+            const blob = new Blob([contractContent], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `mortgage-contract-${userInfo.fullName.replace(/\s+/g, '-')}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            addMessage("📄 Contract downloaded successfully!");
+        }
+
+        function startNew() {
+            location.reload();
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            showStage('initialForm');
+        });
+    </script>
+</body>
+</html>
