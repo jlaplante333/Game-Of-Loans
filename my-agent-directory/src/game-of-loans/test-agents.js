@@ -48,12 +48,17 @@ async function testAgentWorkflow(scenario) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'x-inkeep-tenant-id': TENANT_ID,
+        'x-inkeep-project-id': PROJECT_ID,
+        'x-inkeep-graph-id': GRAPH_ID,
       },
       body: JSON.stringify({
-        tenantId: TENANT_ID,
-        projectId: PROJECT_ID,
-        graphId: GRAPH_ID,
-        message: scenario.input,
+        messages: [
+          {
+            role: 'user',
+            content: scenario.input
+          }
+        ],
         conversationId: `test-${Date.now()}`
       })
     });
@@ -106,7 +111,7 @@ async function testEmailWebhook() {
       body: 'This is a test email to verify the webhook integration is working properly.'
     };
     
-    const response = await fetch('http://localhost:3001/send-email', {
+    const response = await fetch('http://localhost:3004/send-email', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
